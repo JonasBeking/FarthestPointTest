@@ -3,6 +3,15 @@ import "./style.css";
 
 import * as THREE from "three";
 
+function addPoints(list : THREE.Vector2[],center : THREE.Vector2,range : number,amount : number) {
+  for (let i = 0; i < amount; i++) {
+    const x = center.x + (Math.random() - 0.5) * 2 * range
+    const y = center.y + (Math.random() - 0.5) * 2 * range
+    const vec = new THREE.Vector2(x, y);
+    list.push(vec);
+}
+}
+
 function createScene() {
     // Set up the scene, camera, and renderer
     const scene = new THREE.Scene();
@@ -11,34 +20,27 @@ function createScene() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    const vectorList : THREE.Vector2[] = [];
+
+    addPoints(vectorList,new THREE.Vector2(4,2),1,30)
+    addPoints(vectorList,new THREE.Vector2(2,5),1,30)
+    addPoints(vectorList,new THREE.Vector2(2,8),1,30)
+    addPoints(vectorList,new THREE.Vector2(4,12),1,30)
+
+    addPoints(vectorList,new THREE.Vector2(7,2),1,30)
+    addPoints(vectorList,new THREE.Vector2(10,5),1,30)
+    addPoints(vectorList,new THREE.Vector2(10,8),1,30)
+    addPoints(vectorList,new THREE.Vector2(7,12),1,30)
 
 
-    const vectorList = []
 
-    for (let i = 0; i < 50; i++) {
-      const range = 3
-        const x = (Math.random() - 0.5) * range * 2;
-        const y = (Math.random() - 0.5) * range * 2;
-        const vec = new THREE.Vector2(x, y);
-        vectorList.push(vec);
-    }
-
-    for (let i = 0; i < 50; i++) {
-      const range = 3
-      const x = (Math.random() - 0.5) * range * 2 + 10;
-      const y = (Math.random() - 0.5) * range * 2 + 10;
-      const vec = new THREE.Vector2(x, y);
-      vectorList.push(vec);
-  }
-
-    const estimate = new DiameterEstimate(vectorList)
-    const estimatedPointPair = estimate.approximateFarthestPair()
-    console.log(estimatedPointPair)
-    const estimatedCornerPointPair = estimate.approximateFarthestPairUsingCornerPoints()
-    console.log(estimatedCornerPointPair)
-    const actualPointPair = estimate.calculateFarthestPair()
-    console.log(actualPointPair)
-    
+    const estimate = new DiameterEstimate(vectorList);
+    const estimatedPointPair = estimate.approximateFarthestPair();
+    console.log(estimatedPointPair);
+    const estimatedCornerPointPair = estimate.approximateFarthestPairUsingCornerPoints();
+    console.log(estimatedCornerPointPair);
+    const actualPointPair = estimate.calculateFarthestPair();
+    console.log(actualPointPair);
 
     // Convert Vector2 points to Vector3 for Three.js compatibility (setting z = 0)
     const points3D = vectorList.map((point) => new THREE.Vector3(point.x, point.y, 0));
@@ -54,7 +56,7 @@ function createScene() {
     scene.add(points);
 
     // Set the camera position
-    camera.position.z = 5;
+    camera.position.z = 20;
 
     // Animation loop
     function animate() {
